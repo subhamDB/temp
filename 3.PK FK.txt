@@ -1,0 +1,80 @@
+CREATE DATABASE College;
+
+USE College;
+
+CREATE TABLE Student (
+StudID INT PRIMARY KEY,
+RollNo INT,
+Name VARCHAR(50),
+Age INT,
+MobNo VARCHAR(50),
+Address VARCHAR(100)
+);
+
+DESCRIBE Student;
+
+INSERT INTO Student (StudID, RollNo, Name, Age, MobNo, Address) 
+VALUES (1, 1, 'Suraj', 19,'8523697456', 'Rahata');
+
+ALTER TABLE Student MODIFY MobNo VARCHAR(200);
+
+DESCRIBE Student;
+
+INSERT INTO Student 
+VALUES (2, 4, 'Deva', 20, '8459661855', 'Ghargaon');
+
+INSERT INTO Student 
+VALUES (3, 5, 'Sarthak', 19, '4561238567', 'Jalgaon');
+
+INSERT INTO Student 
+VALUES (4, 3, 'Pratik', 19, '4561238523', 'Sangamner');
+
+INSERT INTO Student 
+VALUES (5, 7, 'Prathmesh', 19, '4569838523', 'Sangamner');
+
+INSERT INTO Student 
+VALUES (6, 8, 'Vaibhav', 19, '4568123975', 'Vaijapur');
+
+SELECT * FROM Student;
+
+CREATE TABLE Courses (
+CId INT PRIMARY KEY,
+CName VARCHAR(100),
+StudID INT,
+FOREIGN KEY (StudID) REFERENCES Student(StudID)
+);
+
+DESCRIBE Courses;
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (1, 'Database Management', 1);
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (2, 'Database Management', 3);
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (3, 'Java Programming', 6);
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (4, 'Java Programming', 4);
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (5, 'Web Developer', 2);
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (6, 'Web Developer', 5);
+
+INSERT INTO Courses (CId, CName, StudID) 
+VALUES (7, 'AIML', 1);
+
+SELECT * FROM Courses;
+
+ALTER TABLE Student ADD Class VARCHAR(200);
+
+SELECT * FROM Student;
+
+SELECT * FROM Courses;
+
+DROP TABLE Courses;
+
+SELECT * FROM Courses;

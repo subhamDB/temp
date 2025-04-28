@@ -1,0 +1,11 @@
+create table Book(Book_ID int primary key,Title varchar(150) not null,Author varchar(250) not null ,Publisher varchar(150), Year_Of_Publish int);
+
+create table Member(Member_ID int primary key,Name varchar(150) not null,Address varchar(250) not null ,Email varchar(150),Phone_Number int(10));
+
+create table Loan(Loan_ID int primary key,Book_ID int,Member_ID int,LoanDate date,ReturnDate Date,FOREIGN KEY(Book_ID) REFERENCES Book(Book_ID),FOREIGN KEY(Member_ID) REFERENCES Member(Member_ID));
+
+insert into Book values(1,'shyamchi aai','sane guruji','ebook',2000),(2,'bhagvatgita','shree krishna','book',1000);
+
+insert into Member values(1,'pratik','sinnar','xyz@.com',1000000000),(2,'sarthak','chalisgoan','abc@.com',2000000000);
+
+insert into Loan values(1,1,1,'2024-12-03','2024-12-15');

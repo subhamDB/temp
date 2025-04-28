@@ -1,0 +1,29 @@
+create table Employee(E_Id int primary key, Name varchar(20),D_id int(30),Salary decimal(10,2)); 
+ 
+create table Depertment(D_id int primary key,D_Name varchar(30)); 
+
+insert into Employee values(1,'abc',101,500000.0); 
+
+insert into Employee values(2,'xyz',102,450000.0); 
+
+insert into Employee values(3,'pqr',103,400000.0); 
+
+insert into Depertment values(101,'HR'); 
+
+insert into Depertment values(102,'Engineering'); 
+
+SELECT*FROM Employee; 
+
+SELECT*FROM Depertment; 
+
+create view EmployeeDetails as select e.E_id,e.Name,e.Salary,d.D_Name from Employee e JOIN Depertment d ON e.D_id=d.D_id; 
+
+SELECT*FROM EmployeeDetails; 
+
+update EmployeeDetails set Salary=52000.00 where E_Id=1; 
+
+SELECT*FROM EmployeeDetails; 
+
+create view DepertmentSummary as select d.d_Name,count(e.E_Id)as EmployeeCount, avg(e.Salary)as AvgSalary from Employee e join Depertment d on e.D_id=d.D_id group by d.D_Name; 
+
+SELECT*FROM DepertmentSummary; 

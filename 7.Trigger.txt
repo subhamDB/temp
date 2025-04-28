@@ -1,0 +1,72 @@
+CREATE TABLE Main (
+Id INT,
+Salary INT
+);
+
+INSERT INTO Main (Id, Salary) 
+VALUES (1, 10000), (2, 20000);
+
+CREATE TABLE Backup (
+Id INT,
+Salary INT
+);
+
+DELIMITER //
+CREATE TRIGGER T1
+BEFORE DELETE ON Main
+FOR EACH ROW
+BEGIN
+INSERT INTO Backup (Id, Salary)
+VALUES (OLD.Id, OLD.Salary);
+END;
+//
+DELIMITER ;
+
+DELETE FROM Main WHERE Id = 1;
+
+SELECT *FROM Main;
+
+SELECT *FROM Backup;
+
+CREATE TABLE Employee (
+EID INT,
+EName TEXT,
+Salary INT
+);
+
+CREATE TABLE SalaryChanges (
+EmployeeID INT,
+OldSalary INT,
+NewSalary INT,
+SalaryDifference INT,
+ChangeDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO Employee (EID, EName, Salary) 
+VALUES 
+(1, 'Sarthak', 30000),
+(2, 'Pratik', 25000),
+(3, 'Devashish', 50000),
+(4, 'Hansraj', 40000),
+(5, 'Vaibhav', 45000);
+
+DELIMITER //
+CREATE TRIGGER Salary_Diff
+AFTER UPDATE ON Employee
+FOR EACH ROW
+BEGIN
+DECLARE Salary_Diff INT;
+SET Salary_Diff = NEW.Salary - OLD.Salary;
+INSERT INTO SalaryChanges (EmployeeID, OldSalary, NewSalary, SalaryDifference)
+VALUES (NEW.EID, OLD.Salary, NEW.Salary, Salary_Diff);
+END;
+//
+DELIMITER ;
+
+UPDATE Employee
+SET Salary = 35000
+WHERE EID = 1;
+
+SELECT *FROM Employee WHERE EID = 1;
+
+SELECT *FROM SalaryChanges;

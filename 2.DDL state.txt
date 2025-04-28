@@ -1,0 +1,37 @@
+insert into Member values(1,'pratik','sinnar','xyz@.com',1000000000),(2,'sarthak','chalisgoan','abc@.com',2000000000);
+
+alter table Member add age int not null;
+
+select *from Member;
+
+alter table Member drop column Phone_Number;
+
+select *from Member;
+
+rename table Member to Person;
+
+select *from Member;
+
+select *from Person;
+
+rename table Person to Member;
+
+select *from Member;
+
+truncate table Member; 
+
+select *from Member;
+
+drop table Member;
+
+
+update Member set Name="suraj" Where Member_ID=2;
+
+select *from Member;
+
+delete from Member where Name="suraj";
+
+alter TABLE Member RENAME column Member_ID to M_ID;
+
+alter TABLE Member change Name M_Name varchar(150);
+

@@ -1,0 +1,65 @@
+CREATE TABLE Students (
+     StudentID INT PRIMARY KEY,
+     Name VARCHAR(50),
+     Age INT,
+     Department VARCHAR(50),
+     AdmissionDate DATE,
+     Marks INT
+     );
+
+ INSERT INTO Students VALUES
+    (1, 'Alice', 21, 'IT', '2022-08-15', 85),
+    (2, 'Bob', 19, 'Computer Science', '2023-01-10', 78),
+    (3, 'Charlie', 22, 'Management', '2021-09-05', 92),
+    (4, 'David', 20, 'IT', '2022-11-20', 88),
+    (5, 'Eva', 23, 'Management', '2020-07-25', 80);
+
+ CREATE TABLE Courses (
+        CourseID INT PRIMARY KEY,
+        CourseName VARCHAR(50),
+        Department VARCHAR(50)
+     );
+
+ INSERT INTO Courses VALUES
+    (101, 'Data Science', 'IT'),
+    (102, 'Operating Systems', 'Computer Science'),
+    (103, 'Marketing Basics', 'Management');
+
+CREATE TABLE Enrollments (
+        EnrollmentID INT PRIMARY KEY,
+        StudentID INT,
+        CourseID INT,
+        EnrollmentDate DATE,
+        FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+        FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+    );
+
+ INSERT INTO Enrollments VALUES
+    (1, 1, 101, '2023-03-01'),
+    (2, 2, 102, '2023-03-05'),
+    (3, 3, 103, '2023-03-10'),
+    (4, 4, 101, '2023-03-15');
+
+SELECT * FROM Students WHERE Age > 20;
+
+SELECT * FROM Students WHERE Department <> 'Computer Science';
+
+SELECT * FROM Students WHERE Department = 'IT' OR Department = 'Management';
+
+SELECT * FROM Students WHERE Name NOT LIKE '%a%';
+
+SELECT * FROM Students WHERE Name LIKE 'A%';
+
+SELECT Name, Marks, Marks + 5 AS UpdatedMarks FROM Students;
+
+SELECT Department, COUNT(*) AS NumStudents FROM Students GROUP BY Department;
+
+SELECT Department, AVG(Marks) AS AvgMarks FROM Students GROUP BY Department;
+
+SELECT MAX(Marks) AS MaxMarksInIT FROM Students WHERE Department = 'IT';
+
+SELECT * FROM Students WHERE AdmissionDate > '2023-01-01';
+
+SELECT StudentID FROM Students UNION SELECT StudentID FROM Enrollments;
+
+SELECT Department FROM Students UNION SELECT Department FROM Courses;

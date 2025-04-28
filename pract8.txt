@@ -1,0 +1,25 @@
+CREATE TABLE Employees (EmpID INT PRIMARY KEY,EmpName VARCHAR(50),DepartmentID INT,Salary DECIMAL(10, 2));
+
+CREATE TABLE Departments (DepartmentID INT PRIMARY KEY,DepartmentName VARCHAR(50));
+
+INSERT INTO Departments (DepartmentID, DepartmentName) VALUES(1, 'HR'),(2, 'Finance'),(3, 'Engineering');
+
+INSERT INTO Employees (EmpID, EmpName, DepartmentID, Salary) VALUES(101, 'Alice', 1, 50000),(102, 'Bob', 2, 60000),(103, 'Charlie', 3, 70000),(104, 'David', 3, 80000);
+
+select *from Departments;
+
+select *from Employees;
+
+CREATE VIEW EngineeringEmployees ASSELECT EmpID, EmpName, Salary FROM Employees WHERE DepartmentID = 3;
+
+select *from EngineeringEmployees;
+
+EngineeringEmployees WHERE EmpID = 103;
+
+select *from EngineeringEmployees;
+
+select *from Employees;
+
+CREATE VIEW EmployeeDetails AS SELECT e.EmpID, e.EmpName, d.DepartmentName, e.Salary FROM Employees e JOIN Departments d ON e.DepartmentID = d.DepartmentID;
+
+select *from EmployeeDetails;

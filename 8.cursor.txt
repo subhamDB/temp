@@ -1,0 +1,123 @@
+mysql> CREATE PROCEDURE example_proc()
+    -> BEGIN
+    ->     -- Variable declaration
+    ->     DECLARE emp_name VARCHAR(50);
+    -> 
+    ->     -- Example usage (assigning a value)
+    ->     SET emp_name = 'John Doe';
+    -> 
+    ->     -- You can use SELECT to show the variable
+    ->     SELECT emp_name;
+    -> END //
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> SET @emp_name = 'John Doe';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT @emp_name;
++-----------+
+| @emp_name |
++-----------+
+| John Doe  |
++-----------+
+1 row in set (0.01 sec)
+
+
+mysql> CREATE PROCEDURE fetch_employees()
+    -> BEGIN
+    ->     -- Declare necessary variables first
+    ->     DECLARE v_employee_id INT;
+    ->     DECLARE v_first_name VARCHAR(50);
+    ->     DECLARE v_last_name VARCHAR(50);
+    ->     DECLARE done INT DEFAULT FALSE;
+    -> 
+    ->     -- Declare the cursor
+    ->     DECLARE emp_cursor CURSOR FOR
+    ->         SELECT employee_id, first_name, last_name FROM employees;
+    -> 
+    ->     -- Declare the continue handler to manage the cursor's end
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    -> 
+    ->     -- Open the cursor
+    ->     OPEN emp_cursor;
+    -> 
+    ->     -- Loop through the cursor's results
+    ->     read_loop: LOOP
+    ->         FETCH emp_cursor INTO v_employee_id, v_first_name, v_last_name;
+    -> 
+    ->         -- Exit the loop when all rows have been fetched
+    ->         IF done THEN
+    ->             LEAVE read_loop;
+    ->         END IF;
+    -> 
+    ->         -- Do something with the fetched data (e.g., display the results) 
+    ->         SELECT v_employee_id, v_first_name, v_last_name;
+    ->     END LOOP;
+    -> 
+    ->     -- Close the cursor when done
+    ->     CLOSE emp_cursor;
+    -> END //
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql> 
+mysql> CREATE PROCEDURE fetch_employees_with_cursors()
+    -> BEGIN
+    ->     -- Declare necessary variables
+    ->     DECLARE v_employee_id INT;
+    ->     DECLARE v_first_name VARCHAR(50);
+    ->     DECLARE v_last_name VARCHAR(50);
+    ->     DECLARE v_dept_emp_id INT;
+    ->     DECLARE v_dept_first_name VARCHAR(50);
+    ->     DECLARE done INT DEFAULT FALSE;
+    ->     
+    ->     -- Declare cursor for all employees
+    ->     DECLARE emp_cursor CURSOR FOR
+    ->         SELECT employee_id, first_name, last_name FROM employees;
+    ->     
+    ->     -- Declare cursor with parameters (for department-specific employees) 
+    ->     DECLARE dept_cursor CURSOR FOR
+    ->         SELECT employee_id, first_name 
+    ->         FROM employees WHERE department_id = @dept_id;
+    -> 
+    ->     -- Declare CONTINUE HANDLER for when no rows are found
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    -> 
+    ->     -- -- Example of implicit cursor-like SELECT (using a session variable)
+    ->     SET @emp_name = (SELECT first_name FROM employees WHERE employee_id = 101);
+    ->     SELECT CONCAT('Implicit Cursor Example - Employee Name: ', @emp_name) AS result;
+    -> 
+    ->     -- Open and process the emp_cursor (Explicit Cursor)
+    ->     OPEN emp_cursor;
+    ->     read_loop: LOOP
+    ->         FETCH emp_cursor INTO v_employee_id, v_first_name, v_last_name;
+    ->         IF done THEN
+    ->             LEAVE read_loop;
+    ->         END IF;
+    -> 
+    ->         -- Process the data (similar to DBMS_OUTPUT.PUT_LINE in Oracle)
+    ->         SELECT CONCAT('Explicit Cursor - ID: ', v_employee_id, ', Name: ', v_first_name, ' ', v_last_name) AS result;
+    ->     END LOOP;
+    ->     CLOSE emp_cursor;
+    -> 
+    ->     -- Process the dept_cursor with parameter (Cursor with Parameters)
+    ->     SET @dept_id = 10;  -- Example department ID
+    ->     OPEN dept_cursor;
+    ->     dept_loop: LOOP
+    ->         FETCH dept_cursor INTO v_dept_emp_id, v_dept_first_name;
+    ->         IF done THEN
+    ->             LEAVE dept_loop;
+    ->         END IF;
+    -> 
+    ->         -- Process the data (similar to DBMS_OUTPUT.PUT_LINE in Oracle)
+    ->         SELECT CONCAT('Cursor with Parameters - ID: ', v_dept_emp_id, ', Name: ', v_dept_first_name) AS result;
+    ->     END LOOP;
+    ->     CLOSE dept_cursor;
+    -> END //
+
+
+
